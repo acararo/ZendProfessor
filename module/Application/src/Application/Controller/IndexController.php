@@ -14,6 +14,8 @@ use Zend\View\Model\ViewModel;
 
 class IndexController extends AbstractActionController
 {
+    protected $usuarioTable;
+
     public function indexAction()
     {
         return new ViewModel();
@@ -24,9 +26,21 @@ class IndexController extends AbstractActionController
 
     	$this->results = array(
     		'promocao' => '2 por 10',
-    		'valor' => '10,00'
+    		'valor' => '10,00',
+            'usuario' => $this->getUser()->fetchAll()
     	);
 
         return new ViewModel($this->results);
-    }    
+    }
+
+    public function getUser()
+    {
+
+        if (!$this->usuarioTable){
+            $sm = $this->getServiceLocator();
+            $this->usuarioTable = $sm->get('Application\Model\UsuarioTable');
+        }
+        return $this->usuarioTable;            
+
+    } 
 }
